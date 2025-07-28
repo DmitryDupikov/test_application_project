@@ -1,5 +1,5 @@
-import time
-import pytest
+from selenium.webdriver.support.ui import WebDriverWait
+
 
 from pages.card_page import Test_Card_Page
 
@@ -11,6 +11,7 @@ def login_and_navigate(page):
     page.menu_selection()
     page.test_selection()
     page.plus_icon()
+
 
 def create_new_test(page):
     page.create_title()
@@ -63,8 +64,9 @@ def test_rename_test(chrome_driver):
     page.rename_test()
     page.write_new_title()
     page.save_renaming()
-    time.sleep(1)
-    assert page.renaming_is_correctly() == page.updated_title
+    WebDriverWait(chrome_driver, 10).until(
+        lambda d: page.renaming_is_correctly() == page.updated_title
+    )
 
 
 def test_delete_test(chrome_driver):

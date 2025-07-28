@@ -59,8 +59,9 @@ class Test_Card_Page(ActionBot):
     def __init__(self, driver):
         super().__init__(driver)
         self.create_page = Create_Card_Page(driver)
-        self.updated_title = 'UPDATED_TEST_25' + f'{randint(1, 100)}'
-        self.updated_question_test = 'Новый вопрос' + f'{randint(1, 100)}'
+        self.updated_title = f'UPDATED_TEST_25 {randint(1, 100)}'
+        self.updated_question_test = f'Новый вопрос {randint(1, 100)}'
+
 
     def select_test(self):
         return self.create_page.element(self.create_page.CREATED_TEST_TITLE).click()

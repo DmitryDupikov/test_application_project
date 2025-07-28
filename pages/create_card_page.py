@@ -9,7 +9,7 @@ from pages.base_page import ActionBot
 load_dotenv()
 
 class Create_Card_Page(ActionBot):
-    title = 'My_First_TEST_25' + f'{randint(1, 100)}'
+    title =f'My_First_TEST_25 {randint(1, 100)}'
     EMAIL = (By.XPATH, "//div/input[@data-placeholder='Введите почту']")
     PASSWORD = (By.XPATH, "//div/input[@data-placeholder='Введите пароль']")
     SUBMIT_BUTTON = (By.XPATH, "//button[@type='submit']")
@@ -91,9 +91,8 @@ class Create_Card_Page(ActionBot):
         
     def get_test_titles(self):
         rows = self.elements(self.FIND_ALL_ROWS)
-        titles = [row.find_element(*self.FIND_ALL_TITLES_IN_ROWS).text for row in rows]
-        return titles
-            
+        return [row.find_element(*self.FIND_ALL_TITLES_IN_ROWS).text for row in rows]
+        
     def title_input_field(self):
         return self.element(self.TITLE_INPUT_FIELD)
 
@@ -112,9 +111,7 @@ class Create_Card_Page(ActionBot):
         Функция получает список всех текстовых значений из выпадающего меню 
         выбора типа теста
         """
-        availible_options = self.elements(self.TEST_CHOOSING_OPTION)
-        values = []
-        for option in availible_options:
-            values.append(option.get_dom_attribute('value'))
-        
-        return values
+        return [
+            option.get_dom_attribute('value') 
+            for option in self.elements(self.TEST_CHOOSING_OPTION)
+        ]
