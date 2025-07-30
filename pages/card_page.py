@@ -20,6 +20,7 @@ class Test_Card_Page(ActionBot):
     SAVE_RENAMING = (By.XPATH, "//span[text()='Сохранить ']")
     UPDATED_TITLE = (By.XPATH, "//app-bar-title")
     ACTIVATE_BUTTON = (By.XPATH, ".//span[text()='Активировать']")
+    CENTRAL_PAGE_ACTIVATE_BUTTON = (By.CSS_SELECTOR, "app-test-activate-dialog .mat-button-disabled")
     ACTIVATION_UNAVAILIBLE = (By.XPATH, "//li[text()='В тесте нет вопросов']")
     ADD_QUESTIONS = (By.XPATH, "//*[text()='Вопросы']")
     ADD_NEW_QUESTION = (By.XPATH, "//app-questions-editor//button[contains(@class,'add-button')]")
@@ -33,6 +34,7 @@ class Test_Card_Page(ActionBot):
     ADD_ANSWER_TEXT = (By.XPATH, '//textarea[@data-placeholder="Введите ответ"]')
     ADD_ANSWER_BUTTON = (By.XPATH, '//button[@mattooltip="Добавить ответ"]')
     CHOSING_THE_CORRECT_ANSWER = (By.XPATH, '//mat-radio-group//div[position()=2]//mat-radio-button[position()=1]')
+    CHOOSING_THE_ANOTHER_CORRECT_ANSWER = (By.XPATH, '//mat-radio-group//div[position()=2]//mat-radio-button[position()=1]')
     RETURN_TO_TEST_MENU = (By.TAG_NAME, 'app-bar-back-button')
     QUANTITY_OF_QUESTIONS = (By.XPATH, "//a[2]//*[@class='number']")
     AREA_WITH_DELETE_BUTTON = (By.XPATH, "//app-question-edit-form//div[@class='text-container ng-star-inserted']")
@@ -55,13 +57,18 @@ class Test_Card_Page(ActionBot):
     DEACTIVATE_BUTTON = (By.XPATH, "//span[text()='Деактивировать ']")
     DEACTIVATE_CONFIRMATION = (By.XPATH, "//app-test-deactivate-dialog//button[@color='warn']")
     LAST_TEST_CREATED = (By.XPATH, "//table//tr[1][contains(@class, 'mat-row')]//td/a")
+    ACTIVATION_ERROR = (By.XPATH, "//*[contains(text(),'Вопросы без правильного')]")
+    AREA_WITH_TEST_DESCRIPTION = (By.XPATH, "//span[text()='Укажите описание...']")
+    DESCRIPTION_PENCIL_BUTTON = (By.XPATH, "//app-text-editor//button[@mattooltip='Редактировать']")
+    DESCRIPTION_INPUT_FIELD = (By.XPATH, "//form//textarea")
+    SAVE_DESCRIPTION = (By.XPATH, "//app-text-editor//button[@mattooltip='Сохранить']")
+    FILLED_DESCRIPTION = (By.XPATH, "//app-text-editor//span[@class='text']")
 
     def __init__(self, driver):
         super().__init__(driver)
         self.create_page = Create_Card_Page(driver)
-        self.updated_title = f'UPDATED_TEST_25 {randint(1, 100)}'
-        self.updated_question_test = f'Новый вопрос {randint(1, 100)}'
-
+        self.updated_title = 'UPDATED_TEST_25' + f'{randint(1, 100)}'
+        self.updated_question_test = 'Новый вопрос' + f'{randint(1, 100)}'
 
     def select_test(self):
         return self.create_page.element(self.create_page.CREATED_TEST_TITLE).click()
@@ -185,6 +192,11 @@ class Test_Card_Page(ActionBot):
         ActionChains(self.driver).move_to_element(answer_text).perform()
         return answer_text.find_element(*self.ANSWER_PENCIL_BUTTON).click()
 
+    def add_description_for_test(self):
+        description = self.element(self.AREA_WITH_TEST_DESCRIPTION)
+        ActionChains(self.driver).move_to_element(description).perform()
+        return description.find_element(*self.DESCRIPTION_PENCIL_BUTTON).click()
+
     def profile_button(self):
         return self.element(self.PROFILE_BUTTON).click()
     
@@ -248,3 +260,24 @@ class Test_Card_Page(ActionBot):
    
     def choose_last_test(self):
         return self.element(self.LAST_TEST_CREATED).click()
+    
+    def no_answers_marked(self):
+        return self.element(self.ACTIVATION_ERROR).text
+    
+    def activate_button_field(self):
+        return self.element(self.CENTRAL_PAGE_ACTIVATE_BUTTON)
+    
+    def choose_the_another_answer(self):
+        return self.element(self.CHOOSING_THE_ANOTHER_CORRECT_ANSWER).click()
+    
+    def check_the_answer_was_changed(self):
+        return self.element(self.CHOOSING_THE_ANOTHER_CORRECT_ANSWER)
+    
+    def add_description(self):
+        return self.element(self.DESCRIPTION_INPUT_FIELD).send_keys('описание теста')
+    
+    def save_test_description(self):
+        return self.element(self.SAVE_DESCRIPTION).click()
+    
+    def what_is_the_description(self):
+        return self.element(self.FILLED_DESCRIPTION).text

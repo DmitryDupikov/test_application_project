@@ -1,7 +1,7 @@
-from selenium.webdriver.support.ui import WebDriverWait
-
+import time
 
 from pages.card_page import Test_Card_Page
+
 
 def login_and_navigate(page):
     page.open()
@@ -64,9 +64,8 @@ def test_rename_test(chrome_driver):
     page.rename_test()
     page.write_new_title()
     page.save_renaming()
-    WebDriverWait(chrome_driver, 10).until(
-        lambda d: page.renaming_is_correctly() == page.updated_title
-    )
+    time.sleep(1)
+    assert page.renaming_is_correctly() == page.updated_title
 
 
 def test_delete_test(chrome_driver):
@@ -263,6 +262,61 @@ def test_test_can_be_deactivted_if_active(chrome_driver):
     assert page.is_test_deactivated() == 'Активировать'
 
 
+def test_actvation_unavailible_if_no_answers_marked_but_one_needs(chrome_driver):
+    """
+    Фуункция проверяет появление сообщения о том, что не выбран правильный вариант ответа.
+    Проверяем так же что кнопка активировать недоступна 
+    для вопросав в тесте  - TestCase ID - 30
+    """
+    page = Test_Card_Page(chrome_driver)
+    login_and_navigate(page)
+    create_new_test(page)
+    page.add_questions_button()
+    page.add_new_question_button()
+    page.add_question_text()
+    page.choose_qustion_type()
+    page.click_add_button()
+    page.add_answer_text()
+    page.add_answer_button()
+    page.add_answer_text()
+    page.add_answer_button()
+    page.add_answer_text()
+    page.add_answer_button()
+    page.return_to_test_menu()
+    page.select_test_menu()
+    page.activate_button()
+    assert page.no_answers_marked() == 'Вопросы без правильного варианта ответа: 1.'
+    button = page.activate_button_field()
+    assert "mat-button-disabled" in button.get_attribute('class')
 
 
+def test_change_anwer_in_question_with_one_answer(chrome_driver):
+    """
+    Фуункция проверяет возможность изменения правильного ответа после для вопроса с одним ответом
+    TestCase ID - 61
+    """
+    page = Test_Card_Page(chrome_driver)
+    login_and_navigate(page)
+    create_new_test(page)
+    add_question_and_answers_one_answer_is_correct(page)
+    page.menu_selection()
+    page.test_selection()
+    page.select_test()
+    page.add_questions_button()
+    page.choose_the_another_answer()
+    answer = page.check_the_answer_was_changed()
+    assert "mat-radio-checked" in answer.get_attribute('class')   
 
+
+def test_create_test_description(chrome_driver):
+    """
+    Фуункция проверяет возможность добавления описания теста
+    TestCase ID - 63
+    """
+    page = Test_Card_Page(chrome_driver)
+    login_and_navigate(page)
+    create_new_test(page)
+    page.add_description_for_test()
+    page.add_description()
+    page.save_test_description()
+    assert page.what_is_the_description() == 'описание теста'

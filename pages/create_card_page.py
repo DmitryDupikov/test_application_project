@@ -9,7 +9,7 @@ from pages.base_page import ActionBot
 load_dotenv()
 
 class Create_Card_Page(ActionBot):
-    title =f'My_First_TEST_25 {randint(1, 100)}'
+    title = 'My_First_TEST_25' + f'{randint(1, 100)}'
     EMAIL = (By.XPATH, "//div/input[@data-placeholder='Введите почту']")
     PASSWORD = (By.XPATH, "//div/input[@data-placeholder='Введите пароль']")
     SUBMIT_BUTTON = (By.XPATH, "//button[@type='submit']")
@@ -92,7 +92,7 @@ class Create_Card_Page(ActionBot):
     def get_test_titles(self):
         rows = self.elements(self.FIND_ALL_ROWS)
         return [row.find_element(*self.FIND_ALL_TITLES_IN_ROWS).text for row in rows]
-        
+            
     def title_input_field(self):
         return self.element(self.TITLE_INPUT_FIELD)
 

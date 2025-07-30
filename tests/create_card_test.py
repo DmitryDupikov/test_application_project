@@ -86,7 +86,7 @@ def test_test_is_not_created_with_empty_title(chrome_driver):
     page.add_button()
     current_test_count = len(page.get_test_titles())
     assert initial_test_count == current_test_count
- 
+
 
 def test_test_is_not_created_with_empty_title_by_class(chrome_driver):
     """
