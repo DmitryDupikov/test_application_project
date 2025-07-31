@@ -14,13 +14,12 @@ class AuthorizationPage(ActionBot):
     SUBMIT_BUTTON = (By.XPATH, "//button[@type='submit']")
     IF_ERROR = (By.XPATH, '//div[@class="error ng-star-inserted"]')
     IF_CORRECT = (By.XPATH, "//span[text()='Система тестирования']")
-    enter_parameters = [
+    ENTER_PARAMETERS = (
         ("something", os.getenv('PASSWORD')),
         (os.getenv('LOGIN'), "anything"),
         ("mail@12345", '121213'),
         ("abcde", "fghij")
-    ]
-    
+    )
 
     def __init__(self, driver):
         super().__init__(driver)

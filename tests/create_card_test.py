@@ -1,4 +1,5 @@
 
+import pytest
 from pages.create_card_page import Create_Card_Page
 
 
@@ -114,6 +115,22 @@ def test_two_symbol_title_input(chrome_driver):
     name_field = page.title_input_field()
     assert "ng-invalid" in name_field.get_attribute('class')
     page.wrong_title_input()
+    page.add_button()
+    assert "ng-invalid" in name_field.get_attribute('class')
+
+
+@pytest.mark.parametrize("title_parameters", Create_Card_Page.TITLE_PARAMETERS)
+def test_two_symbol_title_input_with_parameters(chrome_driver, title_parameters):
+    """
+    Функция проверяет что при нажатии кнопки "Добавить" после ввода в тайтл 
+    двух символов тест не создается - TestCase ID - 24
+    """
+    page = Create_Card_Page(chrome_driver)
+    login_and_navigate(page)
+    input = title_parameters
+    name_field = page.title_input_field()
+    assert "ng-invalid" in name_field.get_attribute('class')
+    page.title_input_field().send_keys(input)
     page.add_button()
     assert "ng-invalid" in name_field.get_attribute('class')
 

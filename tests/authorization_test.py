@@ -26,7 +26,7 @@ def test_incorrect_authorization(chrome_driver):
     assert page.if_authorization_is_fail() == 'Не удалось выполнить вход'
 
 
-@pytest.mark.parametrize("enter_parameters", AuthorizationPage.enter_parameters)
+@pytest.mark.parametrize("enter_parameters", AuthorizationPage.ENTER_PARAMETERS)
 def test_incorrect_authorization_with_multiply_parameters(chrome_driver, enter_parameters):
     """
     Данная функция выполняет проверку негативной авторизации c использованием параметрически 

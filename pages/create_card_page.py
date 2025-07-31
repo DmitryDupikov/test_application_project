@@ -29,7 +29,14 @@ class Create_Card_Page(ActionBot):
     FIND_ALL_ROWS = (By.CSS_SELECTOR, "app-tests-table tr.mat-row")
     FIND_ALL_TITLES_IN_ROWS = (By.CSS_SELECTOR, "td.mat-column-name a")
     TITLE_INPUT_FIELD = (By.CSS_SELECTOR, "input[formcontrolname='name']")
-    TEST_CHOOSING_OPTION = (By.CSS_SELECTOR, "mat-option")
+    TEST_CHOOSING_OPTION = (By.CSS_SELECTOR, "//mat-option")
+    TITLE_PARAMETERS = (
+        "so",
+        "an",
+        "**",
+        "12" 
+    )
+
 
     def __init__(self, driver):
         super().__init__(driver)
